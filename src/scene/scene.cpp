@@ -14,8 +14,17 @@ bool Scene::intersect(const Ray& ray, HitRecord& rec) const {
     bool hitAnything = false;
     double closestSoFar = ray.tMax;
 
-    // TODO: Implement ray-scene intersection 
-    // by iterating over all primitives and finding the closest hit.
+    for (const auto& primitive : m_primitives) {
+        HitRecord tempRec;
+
+        if (primitive->intersect(ray, tempRec)) {
+            if (tempRec.t < closestSoFar && tempRec.t > ray.tMin) {
+                hitAnything = true;
+                closestSoFar = tempRec.t;
+                rec = tempRec;
+            }
+        }
+    }
 
     return hitAnything;
 }

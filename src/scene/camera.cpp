@@ -28,10 +28,8 @@ Camera::Camera(const glm::dvec3& eye,
 }
 
 Ray Camera::generateRay(double sampleX, double sampleY) const {
-    // TODO: Convert sample coordinates (sampleX, sampleY) 
-    // to normalized screen coordinates (u, v) in the range [-1, 1].
-    const double u = 0.0;
-    const double v = 0.0;
+    const double u = 2.0 * (sampleX / m_imageWidth) - 1.0;
+    const double v = 1.0 - 2.0 * (sampleY / m_imageHeight);
 
     // Ray direction
     glm::dvec3 dir =
