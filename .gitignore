@@ -1,3 +1,7 @@
 build/
 Slides-old/
 .DS_Store
+/.cache/clangd/index
+/.direnv
+/result
+/compile_commands.json

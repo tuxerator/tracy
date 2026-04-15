@@ -1,13 +1,18 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.30)
 
-project(global_illu)
+set(TRACY "tracy")
+project(${TRACY})
 
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON CACHE INTERNAL "")
+set(CMAKE_COLOR_DIAGNOSTICS ON)
 
-find_package(Qt5Widgets REQUIRED)
-find_package(Threads REQUIRED)
+if(CMAKE_EXPORT_COMPILE_COMMANDS)
+  set(CMAKE_CXX_STANDARD_INCLUDE_DIRECTORIES
+      ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES})
+endif()
 
 set(SOURCES
     main.cpp
@@ -77,18 +82,22 @@ set(HEADERS
     include/io/obj_loader.h
 )
 
-add_executable(global_illu ${SOURCES} ${HEADERS})
 
-target_include_directories(global_illu PRIVATE
+find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Threads REQUIRED)
+
+add_executable(${TRACY} ${SOURCES} ${HEADERS})
+
+target_include_directories(${TRACY} PRIVATE
     include
     3rd_party
 )
 
-target_compile_definitions(global_illu PRIVATE
+target_compile_definitions(${TRACY} PRIVATE
     PROJECT_SOURCE_DIR="${CMAKE_SOURCE_DIR}"
 )
 
-target_link_libraries(global_illu
-    Qt5::Widgets
+target_link_libraries(${TRACY}
+    PRIVATE Qt6::Widgets
     ${CMAKE_THREAD_LIBS_INIT}
 )
