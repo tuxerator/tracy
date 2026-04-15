@@ -37,16 +37,32 @@ Color DirectLightingIntegrator::Li(const Ray& ray,
 
     // Traverse all lights in the scene.
     for (const auto& lightBase : scene.lights()) {
-        // The starter scene only uses point lights.
         auto pointLight = std::dynamic_pointer_cast<PointLight>(lightBase);
         if (!pointLight) {
             continue;
         }
 
-        // TODO:        
-        // Compute the contribution of this light source:
-        // determine the light direction, test visibility with a shadow ray,
-        // evaluate the material response, and accumulate the result.
+        glm::dvec3 lightPos = pointLight->position();
+        glm::dvec3 wiVec = lightPos - rec.position;
+
+        double distanceToLight = glm::length(wiVec);
+        glm::dvec3 wi = wiVec / distanceToLight;
+
+        Ray shadowRay;
+        shadowRay.origin = rec.position + rec.geometricNormal * 1e-6;
+        shadowRay.direction = wi;
+
+        HitRecord shadowRec;
+
+        if (scene.intersect(shadowRay, shadowRec)) {
+            if (shadowRec.t < distanceToLight) {
+                continue;
+            }
+        }
+
+        Color f = rec.material->evaluate(rec, wo, wi);
+
+        result += f;
     }
 
     return result;
