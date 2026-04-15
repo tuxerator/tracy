@@ -13,7 +13,32 @@ Sphere::Sphere(const glm::dvec3& center,
 bool Sphere::intersect(const Ray& ray, HitRecord& rec) const {
     glm::dvec3 oc = ray.origin - m_center;
 
-    // TODO: Implement ray-sphere intersection and populate the HitRecord.
+    double a = glm::dot(ray.direction, ray.direction);
+    double b = 2.0 * glm::dot(oc, ray.direction);
+    double c = glm::dot(oc, oc) - m_radius * m_radius;
 
-    return false;
+    double discriminant = b * b - 4 * a * c;
+
+    if (discriminant < 0) {
+        return false;
+    }
+
+    double sqrtD = std::sqrt(discriminant);
+    double t = (-b - sqrtD) / (2.0 * a);
+
+    if (t < 0) {
+        t = (-b + sqrtD) / (2.0 * a);
+        if (t < 0) {
+            return false;
+        }
+    }
+
+    // HitRecord
+    rec.t = t;
+    rec.position = ray.origin + t * ray.direction;
+    glm::dvec3 outwardNormal = (rec.position - m_center) / m_radius;
+    rec.setFaceNormal(ray.direction, glm::normalize(outwardNormal));
+    rec.material = m_material;
+
+    return true;
 }
