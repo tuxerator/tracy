@@ -7,6 +7,12 @@
 
 #include "core/color.h"
 
+struct GPUPointLight {
+    glm::vec4 position;
+    glm::vec4 intensity;
+};
+static_assert(sizeof(GPUPointLight) == 32);
+
 class Light {
 public:
     virtual ~Light() = default;
@@ -23,6 +29,9 @@ public:
 
     // Scalar intensity multiplied by the light color.
     Color intensity() const;
+
+    // GPU representation for compute shader upload.
+    GPUPointLight toGPU() const;
 
 private:
     glm::dvec3 m_position;

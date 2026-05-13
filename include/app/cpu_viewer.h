@@ -6,31 +6,36 @@
 #include <QLabel>
 #include <QWidget>
 
+#include "app/iviewer.h"
 #include "render/integrator.h"
 #include "scene/camera.h"
 #include "scene/scene.h"
 
-class Viewer : public QWidget {
+class CpuViewer : public QWidget, public IViewer {
 public:
-    Viewer(int width,
-           int height,
-           const Scene& scene,
-           const Camera& camera,
-           const Integrator& integrator,
-           int samplesPerPixel,
-           QLabel* durationLabel,
-           QWidget* parent = nullptr);
+    CpuViewer(int width,
+              int height,
+              const Scene& scene,
+              const Camera& camera,
+              const Integrator& integrator,
+              int samplesPerPixel,
+              QLabel* durationLabel,
+              QWidget* parent = nullptr);
 
-    const QImage& getImage() const;
+    const QImage& getImage() const override;
 
     // Kept for compatibility with future threaded/progressive viewers.
-    void stopRaytrace();
+    void stopRaytrace() override;
+
+    void render() override { renderScene(); }
+
+    QWidget* asWidget() override { return this; }
 
 protected:
     void paintEvent(QPaintEvent* event) override;
+    void resizeEvent(QResizeEvent* event) override;
     QSize sizeHint() const override;
 
-private:
     // Render once into m_image.
     void renderScene();
 

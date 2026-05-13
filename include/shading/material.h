@@ -33,6 +33,14 @@ struct MaterialSample {
     bool delta = false;
 };
 
+struct GPUMaterial {
+    int type;
+    int _pad0[3];
+    glm::vec4 albedo;
+    glm::vec4 emission;
+};
+static_assert(sizeof(GPUMaterial) == 48);
+
 class Material {
 public:
     virtual ~Material() = default;
@@ -68,6 +76,9 @@ public:
     virtual bool isDelta() const {
         return false;
     }
+
+    // GPU representation for compute shader upload.
+    virtual GPUMaterial toGPU() const;
 };
 
 class LambertMaterial : public Material {
@@ -83,6 +94,8 @@ public:
     Color evaluate(const HitRecord& rec,
                    const glm::dvec3& wo,
                    const glm::dvec3& wi) const override;
+
+    GPUMaterial toGPU() const override;
 
 private:
     std::shared_ptr<Texture> m_texture;

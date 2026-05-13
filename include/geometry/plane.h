@@ -1,5 +1,3 @@
-// Infinite plane primitive, useful for simple floors or walls.
-
 #pragma once
 
 #include <memory>
@@ -8,6 +6,14 @@
 #include "geometry/primitive.h"
 #include "shading/material.h"
 
+struct GPUPlane {
+    glm::vec4 point;
+    glm::vec4 normal;
+    int materialIndex;
+    int _pad[3];
+};
+static_assert(sizeof(GPUPlane) == 48);
+
 class Plane : public Primitive {
 public:
     Plane(const glm::dvec3& point,
@@ -15,6 +21,10 @@ public:
           std::shared_ptr<Material> material);
 
     bool intersect(const Ray& ray, HitRecord& rec) const override;
+
+    const std::shared_ptr<Material>& material() const override { return m_material; }
+
+    GPUPlane toGPU(int materialIndex) const;
 
 private:
     glm::dvec3 m_point;

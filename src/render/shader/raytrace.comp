@@ -1,0 +1,40 @@
+#version 430 core
+
+#include "direct_lighting_integrator.glsl"
+
+layout(local_size_x = 16, local_size_y = 16) in;
+
+layout(rgba32f, binding = 0) writeonly uniform image2D u_output;
+
+uniform vec3 u_cameraPos;
+uniform vec3 u_cameraDir;
+uniform vec3 u_cameraRight;
+uniform vec3 u_cameraUp;
+uniform float u_halfWidth;
+uniform float u_halfHeight;
+uniform int u_imageWidth;
+uniform int u_imageHeight;
+
+void main() {
+  ivec2 pixel = ivec2(gl_GlobalInvocationID.xy);
+  if (pixel.x >= u_imageWidth || pixel.y >= u_imageHeight) {
+    return;
+  }
+
+  float u = (float(pixel.x) / float(u_imageWidth)) * 2.0 - 1.0;
+  float v = (float(pixel.y) / float(u_imageHeight)) * 2.0 - 1.0;
+
+  vec3 dir = normalize(u_cameraDir
+        + u * u_halfWidth * u_cameraRight
+        + v * u_halfHeight * u_cameraUp);
+
+  Ray ray;
+  ray.origin = u_cameraPos;
+  ray.direction = normalize(dir);
+  ray.tMin = kEpsilon;
+  ray.tMax = kInfinity;
+
+  vec3 color = direct_lighting_Li(ray, 0);
+
+  imageStore(u_output, pixel, vec4(color, 1.0));
+}

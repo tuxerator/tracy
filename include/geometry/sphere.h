@@ -1,6 +1,3 @@
-// Sphere primitive for the minimal starter.
-// This is the simplest analytic shape and a good first test object.
-
 #pragma once
 
 #include <memory>
@@ -9,6 +6,13 @@
 #include "geometry/primitive.h"
 #include "shading/material.h"
 
+struct GPUSphere {
+    glm::vec4 center;
+    int materialIndex;
+    int _pad[3];
+};
+static_assert(sizeof(GPUSphere) == 32);
+
 class Sphere : public Primitive {
 public:
     Sphere(const glm::dvec3& center,
@@ -16,6 +20,10 @@ public:
            std::shared_ptr<Material> material);
 
     bool intersect(const Ray& ray, HitRecord& rec) const override;
+
+    const std::shared_ptr<Material>& material() const override { return m_material; }
+
+    GPUSphere toGPU(int materialIndex) const;
 
 private:
     glm::dvec3 m_center;

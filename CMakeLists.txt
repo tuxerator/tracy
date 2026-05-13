@@ -18,7 +18,8 @@ set(SOURCES
     main.cpp
 
     src/app/gui.cpp
-    src/app/viewer.cpp
+    src/app/cpu_viewer.cpp
+    src/app/gpu_viewer.cpp
     src/app/scene_factory.cpp
 
     src/core/random.cpp
@@ -32,6 +33,8 @@ set(SOURCES
     src/shading/light.cpp
 
     src/render/renderer.cpp
+    src/render/gpu_renderer.cpp
+    src/render/shader.cpp
     src/render/direct_lighting_integrator.cpp
     src/render/whitted_integrator.cpp
     src/render/path_tracing_integrator.cpp
@@ -46,7 +49,9 @@ set(SOURCES
 
 set(HEADERS
     include/app/gui.h
-    include/app/viewer.h
+    include/app/cpu_viewer.h
+    include/app/iviewer.h
+    include/app/gpu_viewer.h
     include/app/scene_factory.h
 
     include/core/ray.h
@@ -68,6 +73,8 @@ set(HEADERS
     include/shading/light.h
 
     include/render/renderer.h
+    include/render/gpu_renderer.h
+    include/render/shader.h
     include/render/integrator.h
     include/render/direct_lighting_integrator.h
     include/render/whitted_integrator.h
@@ -83,7 +90,7 @@ set(HEADERS
 )
 
 
-find_package(Qt6 REQUIRED COMPONENTS Widgets)
+find_package(Qt6 REQUIRED COMPONENTS OpenGL OpenGLWidgets Widgets)
 find_package(Threads REQUIRED)
 
 add_executable(${TRACY} ${SOURCES} ${HEADERS})
@@ -98,6 +105,6 @@ target_compile_definitions(${TRACY} PRIVATE
 )
 
 target_link_libraries(${TRACY}
-    PRIVATE Qt6::Widgets
+    PRIVATE Qt6::OpenGL Qt6::OpenGLWidgets Qt6::Widgets
     ${CMAKE_THREAD_LIBS_INIT}
 )

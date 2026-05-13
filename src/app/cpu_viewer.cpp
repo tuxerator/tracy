@@ -1,15 +1,16 @@
 // Viewer implementation for the minimal starter.
 // The render is done once in the constructor, and the resulting QImage is drawn.
 
-#include "app/viewer.h"
+#include "app/cpu_viewer.h"
 
 #include <QPainter>
+#include <QResizeEvent>
 #include <chrono>
 
 #include "io/image.h"
 #include "render/renderer.h"
 
-Viewer::Viewer(int width,
+CpuViewer::CpuViewer(int width,
                int height,
                const Scene& scene,
                const Camera& camera,
@@ -29,7 +30,7 @@ Viewer::Viewer(int width,
     renderScene();
 }
 
-void Viewer::renderScene() {
+void CpuViewer::renderScene() {
     auto start = std::chrono::high_resolution_clock::now();
 
     Image image(m_width, m_height);
@@ -53,16 +54,23 @@ void Viewer::renderScene() {
     update();
 }
 
-const QImage& Viewer::getImage() const {
+const QImage& CpuViewer::getImage() const {
     return m_image;
 }
 
-void Viewer::stopRaytrace() {
+void CpuViewer::resizeEvent(QResizeEvent* event) {
+    QWidget::resizeEvent(event);
+    m_width = event->size().width();
+    m_height = event->size().height();
+    renderScene();
+}
+
+void CpuViewer::stopRaytrace() {
     // No background rendering thread is used in the minimal starter.
     // This method is kept for interface compatibility and future extension.
 }
 
-void Viewer::paintEvent(QPaintEvent*) {
+void CpuViewer::paintEvent(QPaintEvent*) {
     QPainter painter(this);
     painter.fillRect(rect(), Qt::black);
 
@@ -71,6 +79,6 @@ void Viewer::paintEvent(QPaintEvent*) {
     }
 }
 
-QSize Viewer::sizeHint() const {
+QSize CpuViewer::sizeHint() const {
     return QSize(m_width, m_height);
 }

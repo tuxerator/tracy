@@ -1,6 +1,3 @@
-// Triangle primitive for the minimal starter.
-// This allows the project to move toward mesh rendering later.
-
 #pragma once
 
 #include <memory>
@@ -8,6 +5,15 @@
 
 #include "geometry/primitive.h"
 #include "shading/material.h"
+
+struct GPUTriangle {
+    glm::vec4 a;
+    glm::vec4 b;
+    glm::vec4 c;
+    int materialIndex;
+    int _pad[3];
+};
+static_assert(sizeof(GPUTriangle) == 64);
 
 class Triangle : public Primitive {
 public:
@@ -17,6 +23,10 @@ public:
              std::shared_ptr<Material> material);
 
     bool intersect(const Ray& ray, HitRecord& rec) const override;
+
+    const std::shared_ptr<Material>& material() const override { return m_material; }
+
+    GPUTriangle toGPU(int materialIndex) const;
 
 private:
     glm::dvec3 m_a;
