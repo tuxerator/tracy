@@ -1,6 +1,7 @@
 // Triangle intersection implementation using the Moller-Trumbore algorithm.
 
 #include "geometry/triangle.h"
+#include<iostream>
 
 #include <glm/glm.hpp>
 #include <cmath>
