@@ -7,6 +7,7 @@
 #include "geometry/geometry.h"
 #include "shading/shading.h"
 #include "io/obj_loader.h"
+#include "shading/image_texture.h"
 
 SceneSetup SceneFactory::createStarterScene(int width, int height) {
     Scene scene;
@@ -15,19 +16,23 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
     auto green = std::make_shared<LambertMaterial>(Color(0.2, 0.8, 0.2));
     auto gray  = std::make_shared<LambertMaterial>(Color(0.7, 0.7, 0.7));
 
+    auto dolphinTexture =
+    std::make_shared<ImageTexture>(
+        "/home/diana/Documents/raytracer/assets/models/10014_dolphin_v1_Diffuse.jpg"
+    );
+
+    auto dolphinMaterial =
+        std::make_shared<LambertMaterial>(
+            dolphinTexture
+        );
+
     // scene.addPrimitive(std::make_shared<Sphere>(
     //     glm::dvec3(-0.35, -0.10, -4.4), 0.9, red));
 
-    // scene.addPrimitive(std::make_shared<Sphere>(
-    //     glm::dvec3(0.95, -0.35, -5.9), 0.65, green));
+    scene.addPrimitive(std::make_shared<Sphere>(
+        glm::dvec3(-4.0, 0.5, 1.0), 2.0, green));
 
-    // scene.addPrimitive(std::make_shared<Triangle>(
-    //     glm::dvec3(-4.2, -1.0, -2.8),
-    //     glm::dvec3( 4.2, -1.0, -2.8),
-    //     glm::dvec3( 0.0, -1.0, -9.5),
-    //     gray));
-
-    OBJLoader::load("/home/diana/Documents/raytracer/assets/models/cube.obj", scene, red);
+    // OBJLoader::load("/home/diana/Documents/raytracer/assets/models/10014_dolphin_v2_max2011_it2.obj", scene, dolphinMaterial);
 
     scene.addLight(std::make_shared<PointLight>(
         glm::dvec3(3.0, 4.0, 0.0),
@@ -35,10 +40,10 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
         25.0));
 
     Camera camera(
-        glm::dvec3(0.0, 0.5, 1.5),   // eye
-        glm::dvec3(0.0, 0.0, -4.0),  // target
-        glm::dvec3(0.0, 1.0, 0.0),   // up
-        45.0,                        // vertical FOV in degrees
+        glm::dvec3(15.0, 0.5, 3.0),   // eye (40 Meter nach rechts verschoben)
+        glm::dvec3(11.5, 0.5, 2.5),
+        glm::dvec3(0.0, 1.0, 0.0),
+        45.0,
         width,
         height
     );

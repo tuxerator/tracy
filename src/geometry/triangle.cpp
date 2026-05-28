@@ -11,6 +11,15 @@
 Triangle::Triangle(const glm::dvec3& a,
                    const glm::dvec3& b,
                    const glm::dvec3& c,
+                    const glm::dvec2& uv0,
+                    const glm::dvec2& uv1,
+                    const glm::dvec2& uv2,
+                   std::shared_ptr<Material> material)
+    : m_a(a), m_b(b), m_c(c), m_uv0(uv0), m_uv1(uv1),m_uv2(uv2), m_material(std::move(material)) {}
+
+Triangle::Triangle(const glm::dvec3& a,
+                   const glm::dvec3& b,
+                   const glm::dvec3& c,
                    std::shared_ptr<Material> material)
     : m_a(a), m_b(b), m_c(c), m_material(std::move(material)) {}
 
@@ -50,7 +59,9 @@ bool Triangle::intersect(const Ray& ray, HitRecord& rec) const {
     glm::dvec3 outwardNormal = glm::normalize(glm::cross(edge1, edge2));
     rec.setFaceNormal(ray.direction, outwardNormal);
     rec.material = m_material;
-    rec.uv = glm::dvec2(u, v);
+    double w = 1.0 - u - v;
+
+    rec.uv = w * m_uv0 + u * m_uv1 + v * m_uv2;
 
     return true;
 }

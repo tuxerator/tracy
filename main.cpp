@@ -6,6 +6,7 @@
 #include "app/gui.h"
 #include "app/scene_factory.h"
 #include "render/direct_lighting_integrator.h"
+#include "iostream"
 
 int main(int argc, char** argv) {
     QApplication app(argc, argv);
@@ -16,9 +17,12 @@ int main(int argc, char** argv) {
 
     SceneSetup setup = SceneFactory::createStarterScene(width, height);
 
+    std::cout << "setup done" << std::endl;
     DirectLightingIntegrator integrator(3, Color(0.08, 0.08, 0.10));
+    std::cout << "integrator done" << std::endl;
 
     Gui window(width, height, setup.scene, setup.camera, integrator, samplesPerPixel);
+    
     window.show();
 
     return app.exec();

@@ -1,6 +1,7 @@
 // Scene implementation using brute-force traversal over all primitives.
 
 #include "scene/scene.h"
+#include "geometry/triangle.h"
 
 void Scene::addPrimitive(const std::shared_ptr<Primitive>& primitive) {
     m_primitives.push_back(primitive);

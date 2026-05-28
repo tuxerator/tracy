@@ -7,6 +7,7 @@
 
 #include "geometry/primitive.h"
 #include "shading/light.h"
+#include "geometry/triangle.h"
 
 class Scene {
 public:
