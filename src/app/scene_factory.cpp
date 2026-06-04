@@ -15,6 +15,7 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
     auto red   = std::make_shared<LambertMaterial>(Color(0.8, 0.2, 0.2));
     auto green = std::make_shared<LambertMaterial>(Color(0.2, 0.8, 0.2));
     auto gray  = std::make_shared<LambertMaterial>(Color(0.7, 0.7, 0.7));
+    auto mirror = std::make_shared<MirrorMaterial>(Color(0.95, 0.95, 0.95));
 
     auto dolphinTexture =
     std::make_shared<ImageTexture>(
@@ -26,11 +27,11 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
             dolphinTexture
         );
 
-    // scene.addPrimitive(std::make_shared<Sphere>(
-    //     glm::dvec3(-0.35, -0.10, -4.4), 0.9, red));
+    scene.addPrimitive(std::make_shared<Sphere>(
+        glm::dvec3(0.5, -3.0, 3.0), 1.4, red));
 
     scene.addPrimitive(std::make_shared<Sphere>(
-        glm::dvec3(-4.0, 0.5, 1.0), 2.0, green));
+        glm::dvec3(-1.5, 0.5, 1.5), 2.0, mirror));
 
     OBJLoader::load("/home/diana/Documents/raytracer/assets/models/10014_dolphin_v2_max2011_it2.obj", scene, dolphinMaterial);
 
