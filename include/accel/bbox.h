@@ -3,6 +3,7 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include "core/ray.h"
 
 class BBox {
 public:
@@ -11,6 +12,10 @@ public:
 
     const glm::dvec3& min() const { return m_min; }
     const glm::dvec3& max() const { return m_max; }
+    
+    bool intersect(const Ray& ray) const;
+    glm::dvec3 centroid() const;
+
 
 private:
     glm::dvec3 m_min;

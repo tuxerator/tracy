@@ -42,3 +42,13 @@ bool Sphere::intersect(const Ray& ray, HitRecord& rec) const {
 
     return true;
 }
+
+BBox Sphere::boundingBox() const
+{
+    glm::dvec3 r(m_radius);
+
+    return BBox(
+        m_center - r,
+        m_center + r
+    );
+}

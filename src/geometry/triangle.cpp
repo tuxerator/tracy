@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 #include <cmath>
+#include <algorithm>
 
 #include "core/constants.h"
 
@@ -64,4 +65,21 @@ bool Triangle::intersect(const Ray& ray, HitRecord& rec) const {
     rec.uv = w * m_uv0 + u * m_uv1 + v * m_uv2;
 
     return true;
+}
+
+BBox Triangle::boundingBox() const
+{
+    glm::dvec3 mn(
+        std::min({m_a.x,m_b.x,m_c.x}),
+        std::min({m_a.y,m_b.y,m_c.y}),
+        std::min({m_a.z,m_b.z,m_c.z})
+    );
+
+    glm::dvec3 mx(
+        std::max({m_a.x,m_b.x,m_c.x}),
+        std::max({m_a.y,m_b.y,m_c.y}),
+        std::max({m_a.z,m_b.z,m_c.z})
+    );
+
+    return BBox(mn,mx);
 }

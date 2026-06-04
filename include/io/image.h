@@ -9,7 +9,6 @@
 class Image {
 public:
     Image(int width, int height);
-
     int width() const;
     int height() const;
 

@@ -8,6 +8,7 @@
 #include "geometry/primitive.h"
 #include "shading/light.h"
 #include "geometry/triangle.h"
+#include "accel/bvh.h"
 
 class Scene {
 public:
@@ -20,10 +21,13 @@ public:
     // Return true as soon as any primitive blocks the ray.
     bool occluded(const Ray& ray) const;
 
+    void buildBVH();
+
     const std::vector<std::shared_ptr<Light>>& lights() const;
 
 private:
     std::vector<std::shared_ptr<Primitive>> m_primitives;
+    std::shared_ptr<Primitive> m_root;
     std::vector<std::shared_ptr<Light>> m_lights;
 
     // Later directions may cache acceleration structures here.

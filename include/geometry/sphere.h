@@ -8,6 +8,7 @@
 
 #include "geometry/primitive.h"
 #include "shading/material.h"
+#include "accel/bbox.h"
 
 class Sphere : public Primitive {
 public:
@@ -16,6 +17,7 @@ public:
            std::shared_ptr<Material> material);
 
     bool intersect(const Ray& ray, HitRecord& rec) const override;
+    BBox boundingBox() const override;
 
 private:
     glm::dvec3 m_center;

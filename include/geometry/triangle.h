@@ -9,6 +9,7 @@
 
 #include "geometry/primitive.h"
 #include "shading/material.h"
+#include "accel/bbox.h"
 
 class Triangle : public Primitive {
 public:
@@ -33,6 +34,8 @@ public:
     );
 
     bool intersect(const Ray& ray, HitRecord& rec) const override;
+
+    BBox boundingBox() const override;
 
 private:
     glm::dvec3 m_a;

@@ -32,12 +32,14 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
     scene.addPrimitive(std::make_shared<Sphere>(
         glm::dvec3(-4.0, 0.5, 1.0), 2.0, green));
 
-    // OBJLoader::load("/home/diana/Documents/raytracer/assets/models/10014_dolphin_v2_max2011_it2.obj", scene, dolphinMaterial);
+    OBJLoader::load("/home/diana/Documents/raytracer/assets/models/10014_dolphin_v2_max2011_it2.obj", scene, dolphinMaterial);
 
     scene.addLight(std::make_shared<PointLight>(
         glm::dvec3(3.0, 4.0, 0.0),
         Color(1.0, 1.0, 1.0),
         25.0));
+
+    scene.buildBVH();
 
     Camera camera(
         glm::dvec3(15.0, 0.5, 3.0),   // eye (40 Meter nach rechts verschoben)
