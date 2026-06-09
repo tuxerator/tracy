@@ -68,6 +68,7 @@ public:
     virtual bool isDelta() const {
         return false;
     }
+
 };
 
 class LambertMaterial : public Material {

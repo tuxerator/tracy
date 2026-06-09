@@ -16,3 +16,4 @@ const glm::dvec3& PointLight::position() const {
 Color PointLight::intensity() const {
     return m_intensity * m_intensityColor;
 }
+

@@ -10,20 +10,27 @@
 
 class Scene {
 public:
-    void addPrimitive(const std::shared_ptr<Primitive>& primitive);
-    void addLight(const std::shared_ptr<Light>& light);
+  Scene(Color background);
+  void addPrimitive(const std::shared_ptr<Primitive> &primitive);
+  void addLight(const std::shared_ptr<Light> &light);
 
-    // Find the closest hit, if any.
-    bool intersect(const Ray& ray, HitRecord& rec) const;
+  // Find the closest hit, if any.
+  bool intersect(const Ray &ray, HitRecord &rec) const;
 
-    // Return true as soon as any primitive blocks the ray.
-    bool occluded(const Ray& ray) const;
+  // Return true as soon as any primitive blocks the ray.
+  bool occluded(const Ray &ray) const;
 
-    const std::vector<std::shared_ptr<Light>>& lights() const;
+  const Color &background() const { return m_background; }
+
+  const std::vector<std::shared_ptr<Light>> &lights() const;
+  const std::vector<std::shared_ptr<Primitive>> &primitives() const {
+    return m_primitives;
+  }
 
 private:
-    std::vector<std::shared_ptr<Primitive>> m_primitives;
-    std::vector<std::shared_ptr<Light>> m_lights;
+  Color m_background;
+  std::vector<std::shared_ptr<Primitive>> m_primitives;
+  std::vector<std::shared_ptr<Light>> m_lights;
 
-    // Later directions may cache acceleration structures here.
+  // Later directions may cache acceleration structures here.
 };

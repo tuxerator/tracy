@@ -1,6 +1,3 @@
-// Triangle primitive for the minimal starter.
-// This allows the project to move toward mesh rendering later.
-
 #pragma once
 
 #include <memory>
@@ -17,6 +14,8 @@ public:
              std::shared_ptr<Material> material);
 
     bool intersect(const Ray& ray, HitRecord& rec) const override;
+
+    const std::shared_ptr<Material>& material() const override { return m_material; }
 
 private:
     glm::dvec3 m_a;

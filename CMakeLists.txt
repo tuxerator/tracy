@@ -18,7 +18,7 @@ set(SOURCES
     main.cpp
 
     src/app/gui.cpp
-    src/app/viewer.cpp
+    src/app/cpu_viewer.cpp
     src/app/scene_factory.cpp
 
     src/core/random.cpp
@@ -46,7 +46,8 @@ set(SOURCES
 
 set(HEADERS
     include/app/gui.h
-    include/app/viewer.h
+    include/app/cpu_viewer.h
+    include/app/iviewer.h
     include/app/scene_factory.h
 
     include/core/ray.h

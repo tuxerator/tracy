@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debug tracy",
+            "type": "codelldb",
+            "request": "launch",
+            "program": "${workspaceFolder}/build/debug/tracy",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${workspaceFolder}",
+            "environment": [],
+            "externalConsole": false,
+            "preLaunchTask": "CMake: build debug",
+        },
+    ],
+}

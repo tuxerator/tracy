@@ -6,12 +6,12 @@
 
 class DirectLightingIntegrator : public Integrator {
 public:
-    DirectLightingIntegrator(int maxDepth, const Color& background);
+  DirectLightingIntegrator(int maxDepth);
 
-    Color Li(const Ray& ray, const Scene& scene, int depth) const override;
+  Color Li(const Ray &ray, const Scene &scene, int depth) const override;
 
 private:
-    // Kept for consistency with recursive integrator interfaces.
-    int m_maxDepth;
-    Color m_background;
+  // Kept for consistency with recursive integrator interfaces.
+  int m_maxDepth;
+  Color m_background;
 };
