@@ -3,6 +3,7 @@
 #include <QLabel>
 #include <QOpenGLFunctions>
 #include <QOpenGLWidget>
+#include <chrono>
 
 #include "app/iviewer.h"
 #include "render/gpu_renderer.h"
@@ -14,7 +15,7 @@ class GpuViewer : public QOpenGLWidget,
                   protected QOpenGLFunctions,
                   public IViewer {
 public:
-  GpuViewer(int width, int height, const Scene &scene, const Camera &camera,
+  GpuViewer(const Scene &scene, const Camera &camera,
             const Integrator &integrator, int samplesPerPixel,
             QLabel *durationLabel, QWidget *parent = nullptr);
 
@@ -23,22 +24,27 @@ public:
   // IViewer implementation
   const QImage &getImage() const override;
   void stopRaytrace() override;
-  void render() override { update(); }
+  void render() override;
   QWidget *asWidget() override { return this; }
+
+  void setSamplesPerPixel(const int samplesPerPixel) override {
+    m_samplesPerPixel = samplesPerPixel;
+  }
 
 protected:
   void initializeGL() override;
-  void resizeGL(int w, int h) override;
   void paintGL() override;
 
 private:
-  int m_width = 0;
-  int m_height = 0;
-
   const Scene &m_scene;
   const Camera &m_camera;
   const Integrator &m_integrator;
   int m_samplesPerPixel = 1;
+
+  int m_currentSample = 0;
+  int m_batchSize = 1;
+  bool m_renderInProgress = false;
+  std::chrono::time_point<std::chrono::high_resolution_clock> m_renderStartTime;
 
   QLabel *m_durationLabel = nullptr;
   QImage m_dummyImage;

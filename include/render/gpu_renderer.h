@@ -11,11 +11,15 @@ class Scene;
 
 class GpuRenderer : protected QOpenGLExtraFunctions {
 public:
-  GpuRenderer() = default;
+  GpuRenderer(const Camera &camera);
+
   ~GpuRenderer();
 
   bool initialize();
-  void render(const Camera &camera);
+  void beginRender();
+  void dispatchSample(int sampleCount);
+  void endRender();
+  void display(int sampleCount);
 
   void uploadScene(const Scene &scene);
 
@@ -24,6 +28,8 @@ private:
   void setupComputeShader();
   void setupGeometry();
   void createOutputTexture(int width, int height);
+
+  const Camera &m_camera;
 
   QOpenGLShaderProgram *m_displayProgram = nullptr;
   QOpenGLShaderProgram *m_computeProgram = nullptr;

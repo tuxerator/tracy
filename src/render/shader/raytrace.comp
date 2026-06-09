@@ -1,10 +1,11 @@
 #version 430 core
 
 #include "direct_lighting_integrator.glsl"
+#include "src/core/shader/random.glsl"
 
 layout(local_size_x = 16, local_size_y = 16) in;
 
-layout(rgba32f, binding = 0) writeonly uniform image2D u_output;
+layout(rgba32f, binding = 0) uniform image2D u_output;
 
 uniform vec3 u_cameraPos;
 uniform vec3 u_cameraDir;
@@ -14,6 +15,7 @@ uniform float u_halfWidth;
 uniform float u_halfHeight;
 uniform int u_imageWidth;
 uniform int u_imageHeight;
+uniform int u_sampleCount;
 
 void main() {
   ivec2 pixel = ivec2(gl_GlobalInvocationID.xy);
@@ -21,8 +23,11 @@ void main() {
     return;
   }
 
-  float u = (float(pixel.x) / float(u_imageWidth)) * 2.0 - 1.0;
-  float v = (float(pixel.y) / float(u_imageHeight)) * 2.0 - 1.0;
+  vec2 rand = rand_pixel(pixel, u_sampleCount);
+
+  // u, v in [-1, 1]
+  float u = (float(pixel.x + rand.x) / float(u_imageWidth)) * 2.0 - 1.0;
+  float v = (float(pixel.y + rand.y) / float(u_imageHeight)) * 2.0 - 1.0;
 
   vec3 dir = normalize(u_cameraDir
         + u * u_halfWidth * u_cameraRight
@@ -34,7 +39,10 @@ void main() {
   ray.tMin = kEpsilon;
   ray.tMax = kInfinity;
 
-  vec3 color = direct_lighting_Li(ray, 0);
-
-  imageStore(u_output, pixel, vec4(color, 1.0));
+  vec3 Li = direct_lighting_Li(ray, 0);
+  if (u_sampleCount <= 1) {
+    imageStore(u_output, pixel, vec4(Li, 1.0));
+  } else {
+    imageStore(u_output, pixel, imageLoad(u_output, pixel) + vec4(Li, 1.0));
+  }
 }

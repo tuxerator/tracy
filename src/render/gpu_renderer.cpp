@@ -1,9 +1,11 @@
 #include "render/gpu_renderer.h"
 
 #include <GL/gl.h>
+#include <QDebug>
 #include <QFile>
 #include <QVector3D>
 #include <map>
+#include <memory>
 
 #include "geometry/plane.h"
 #include "geometry/sphere.h"
@@ -13,6 +15,8 @@
 #include "scene/scene.h"
 #include "shading/light.h"
 #include "shading/material.h"
+
+GpuRenderer::GpuRenderer(const Camera &camera) : m_camera(camera) {}
 
 GpuRenderer::~GpuRenderer() {
   delete m_displayProgram;
@@ -44,32 +48,32 @@ bool GpuRenderer::initialize() {
   return true;
 }
 
-void GpuRenderer::render(const Camera &camera) {
-  int w = camera.imageWidth();
-  int h = camera.imageHeight();
+void GpuRenderer::beginRender() {
+  int w = m_camera.imageWidth();
+  int h = m_camera.imageHeight();
 
   if (w != m_textureWidth || h != m_textureHeight) {
     createOutputTexture(w, h);
   }
 
-  // --- Compute pass ---
   m_computeProgram->bind();
 
   m_computeProgram->setUniformValue(
       "u_cameraPos",
-      QVector3D(camera.origin().x, camera.origin().y, camera.origin().z));
+      QVector3D(m_camera.origin().x, m_camera.origin().y, m_camera.origin().z));
   m_computeProgram->setUniformValue(
-      "u_cameraDir", QVector3D(camera.direction().x, camera.direction().y,
-                               camera.direction().z));
+      "u_cameraDir", QVector3D(m_camera.direction().x, m_camera.direction().y,
+                               m_camera.direction().z));
   m_computeProgram->setUniformValue(
       "u_cameraRight",
-      QVector3D(camera.right().x, camera.right().y, camera.right().z));
+      QVector3D(m_camera.right().x, m_camera.right().y, m_camera.right().z));
   m_computeProgram->setUniformValue(
-      "u_cameraUp", QVector3D(camera.up().x, camera.up().y, camera.up().z));
+      "u_cameraUp",
+      QVector3D(m_camera.up().x, m_camera.up().y, m_camera.up().z));
   m_computeProgram->setUniformValue("u_halfWidth",
-                                    static_cast<float>(camera.halfWidth()));
+                                    static_cast<float>(m_camera.halfWidth()));
   m_computeProgram->setUniformValue("u_halfHeight",
-                                    static_cast<float>(camera.halfHeight()));
+                                    static_cast<float>(m_camera.halfHeight()));
   m_computeProgram->setUniformValue("u_imageWidth", w);
   m_computeProgram->setUniformValue("u_imageHeight", h);
 
@@ -85,18 +89,29 @@ void GpuRenderer::render(const Camera &camera) {
   m_computeProgram->setUniformValue("u_numPlanes", m_numPlanes);
   m_computeProgram->setUniformValue("u_numLights", m_numLights);
 
-  glBindImageTexture(0, m_outputTexture, 0, GL_FALSE, 0, GL_WRITE_ONLY,
+  glBindImageTexture(0, m_outputTexture, 0, GL_FALSE, 0, GL_READ_WRITE,
                      GL_RGBA32F);
-  glDispatchCompute(static_cast<GLuint>((w + 15) / 16),
-                    static_cast<GLuint>((h + 15) / 16), 1);
+}
+
+void GpuRenderer::dispatchSample(const int sampleCount) {
+  m_computeProgram->bind();
+  GLuint groupsX = static_cast<GLuint>((m_textureWidth + 15) / 16);
+  GLuint groupsY = static_cast<GLuint>((m_textureHeight + 15) / 16);
+  m_computeProgram->setUniformValue("u_sampleCount", sampleCount);
+  glDispatchCompute(groupsX, groupsY, 1);
   glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
+}
 
+void GpuRenderer::endRender() {
   m_computeProgram->release();
+  glFinish();
+}
 
-  // --- Display pass ---
-  glViewport(0, 0, w, h);
-
+void GpuRenderer::display(const int sampleCount) {
+  glViewport(0, 0, m_camera.imageWidth(), m_camera.imageHeight());
   m_displayProgram->bind();
+  m_displayProgram->setUniformValue("u_sampleCount",
+                                    sampleCount > 0 ? sampleCount : 1);
 
   glActiveTexture(GL_TEXTURE0);
   glBindTexture(GL_TEXTURE_2D, m_outputTexture);
@@ -104,7 +119,6 @@ void GpuRenderer::render(const Camera &camera) {
 
   QOpenGLVertexArrayObject::Binder vaoBinder(&m_vao);
   glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-  glFinish();
 
   m_displayProgram->release();
 }
