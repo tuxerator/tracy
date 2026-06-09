@@ -61,7 +61,11 @@ Color DirectLightingIntegrator::Li(const Ray &ray, const Scene &scene,
 
     Color f = rec.material->evaluate(rec, wo, wi);
 
-    result += f;
+    Color Li = pointLight->intensity() / (distanceToLight * distanceToLight);
+
+    double cosTheta = std::max(0.0, glm::dot(rec.shadingNormal, wi));
+
+    result += f * Li * cosTheta;
   }
 
   return result;
