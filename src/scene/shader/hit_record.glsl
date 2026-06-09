@@ -5,6 +5,7 @@ struct HitRecord {
   float t;
   vec3 position;
   vec3 normal;
+  vec3 shadingNormal;
   bool frontFace;
   int materialIndex;
 };
@@ -12,6 +13,7 @@ struct HitRecord {
 void hitRecord_setFaceNormal(inout HitRecord rec, vec3 rayDir, vec3 outwardNormal) {
   rec.frontFace = dot(rayDir, outwardNormal) < 0.0;
   rec.normal = rec.frontFace ? outwardNormal : -outwardNormal;
+  rec.shadingNormal = rec.normal;
 }
 
 #endif

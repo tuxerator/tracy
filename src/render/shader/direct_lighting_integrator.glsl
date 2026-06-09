@@ -47,7 +47,9 @@ vec3 direct_lighting_Li(Ray ray, int depth) {
 
     vec3 f = mat.albedo.rgb / 3.14159265;
 
-    result += f;
+    vec4 Li = light.intensity / (dist * dist);
+
+    result += f * Li.xyz * cosTheta;
   }
 
   return result;
