@@ -7,6 +7,7 @@
 #include <qsizepolicy.h>
 
 #include "app/cpu_viewer.h"
+#include "app/gpu_viewer.h"
 
 Gui::Gui(int width, int height, const Scene &scene, const Camera &camera,
          const Integrator &integrator, int samplesPerPixel, QWindow *parent)
@@ -143,6 +144,7 @@ void Gui::resizeViewer() {
   int w = m_widthInput->value();
   int h = m_heightInput->value();
   m_camera.resize(w, h);
+  m_graphicsScene->setSceneRect(0, 0, w, h);
   m_viewer->render();
   qWarning() << "Viewer size: " << m_viewer->asWidget()->width() << "x"
              << m_viewer->asWidget()->height();
@@ -158,7 +160,6 @@ void Gui::createViewer(bool useGpu) {
       delete m_graphicsProxy;
       m_graphicsProxy = nullptr;
     }
-    delete m_viewer;
     m_viewer = nullptr;
   }
 
