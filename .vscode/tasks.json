@@ -1,0 +1,30 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "CMake: configure debug",
+            "type": "shell",
+            "command": "cmake",
+            "args": ["--preset", "debug"],
+            "options": {
+                "cwd": "${workspaceFolder}",
+            },
+            "problemMatcher": [],
+            "group": "build",
+            "detail": "Configure CMake with debug preset",
+        },
+        {
+            "label": "CMake: build debug",
+            "type": "shell",
+            "command": "cmake",
+            "args": ["--build", "--preset", "debug"],
+            "options": {
+                "cwd": "${workspaceFolder}",
+            },
+            "problemMatcher": [],
+            "group": "build",
+            "detail": "Build debug target with Ninja",
+            "dependsOn": ["CMake: configure debug"],
+        },
+    ],
+}
