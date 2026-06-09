@@ -41,3 +41,4 @@ GPUPlane Plane::toGPU(int materialIndex) const {
   gpu.materialIndex = materialIndex;
   return gpu;
 }
+

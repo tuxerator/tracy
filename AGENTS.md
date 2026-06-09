@@ -38,7 +38,11 @@ cmake --build --preset release                 # release build
 
 ### Build system details
 - CMake 3.30+, generator: Ninja, C++20 (`CMAKE_CXX_STANDARD 20`)
+<<<<<<< HEAD
 - Dependencies: Qt6 (OpenGL, OpenGLWidgets, Widgets), Threads, GLM (vendored)
+=======
+- Dependencies: Qt6 (Widgets), Threads, GLM (vendored)
+>>>>>>> main
 - Compile def: `PROJECT_SOURCE_DIR` for asset paths
 - No tests, no CTest, no test framework configured
 - No CI, no linters, no formatters configured
@@ -61,7 +65,10 @@ Update both `SOURCES` and `HEADERS` lists in `CMakeLists.txt`.
 |---------|-----------|---------|
 | Files/dirs | `snake_case` | `cpu_viewer.h`, `direct_lighting_integrator.cpp` |
 | Classes & structs | PascalCase | `HitRecord`, `Sphere`, `DirectLightingIntegrator` |
+<<<<<<< HEAD
 | GPU structs | PascalCase with `GPU` prefix | `GPUSphere`, `GPUTriangle` |
+=======
+>>>>>>> main
 | Enums | `enum class` PascalCase | `MaterialType { Lambert, Mirror, Dielectric, Emissive, Unknown }` |
 | Methods & functions | camelCase | `generateRay()`, `intersect()`, `setFaceNormal()` |
 | Member variables | `m_` prefix | `m_center`, `m_imageWidth`, `m_material` |
@@ -139,12 +146,18 @@ private:
 - No exceptions, no `assert()` (in current code)
 
 ### Qt patterns
+<<<<<<< HEAD
 - Qt6 (OpenGL, OpenGLWidgets, Widgets)
 - Widget hierarchy: `QMainWindow`, `QWidget`, `QOpenGLWidget`
+=======
+- Qt6 (Widgets)
+- Widget hierarchy: `QMainWindow`, `QWidget`
+>>>>>>> main
 - Signal/slot connections via lambdas
 - `QOverload<int>::of(&QSpinBox::valueChanged)` for overloaded signals
 - `Q_UNUSED(var)` for unused parameters
 
+<<<<<<< HEAD
 ### GPU data patterns
 - GPU structs use `glm::vec4` for alignment
 - Explicit padding: `int _pad[3];`
@@ -152,13 +165,19 @@ private:
 - `toGPU(int materialIndex)` method on geometry classes
 - SSBO-based data upload
 
+=======
+>>>>>>> main
 ### Initialization
 - Constructor member initializer lists
 - In-class default member initializers: `int m_width = 0;`
 - `std::move()` for `shared_ptr` in constructors: `m_material(std::move(material))`
 
 ### Struct vs class
+<<<<<<< HEAD
 - `struct` for POD-like data holders (`HitRecord`, `MaterialSample`, `GPUSphere`, `SceneSetup`)
+=======
+- `struct` for POD-like data holders (`HitRecord`, `MaterialSample`, `SceneSetup`)
+>>>>>>> main
 - `class` for everything with methods/encapsulation
 
 # Caveman

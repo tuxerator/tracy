@@ -7,7 +7,6 @@
 #include <qsizepolicy.h>
 
 #include "app/cpu_viewer.h"
-#include "app/gpu_viewer.h"
 
 Gui::Gui(int width, int height, const Scene &scene, const Camera &camera,
          const Integrator &integrator, int samplesPerPixel, QWindow *parent)
@@ -176,15 +175,12 @@ void Gui::createViewer(bool useGpu) {
     setCentralWidget(m_graphicsView);
   }
 
-  int w = m_widthInput->value();
-  int h = m_heightInput->value();
-
   if (useGpu) {
     m_viewer = new GpuViewer(m_scene, m_camera, m_integrator, m_samplesPerPixel,
                              m_durationText);
   } else {
-    m_viewer = new CpuViewer(w, h, m_scene, m_camera, m_integrator,
-                             m_samplesPerPixel, m_durationText);
+    m_viewer = new CpuViewer(m_scene, m_camera, m_integrator, m_samplesPerPixel,
+                             m_durationText);
   }
 
   m_graphicsProxy = m_graphicsScene->addWidget(m_viewer->asWidget());

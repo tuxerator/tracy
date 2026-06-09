@@ -53,3 +53,4 @@ GPUMaterial LambertMaterial::toGPU() const {
   gpu.albedo = glm::vec4(a.x, a.y, a.z, 0.0f);
   return gpu;
 }
+

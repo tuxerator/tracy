@@ -48,3 +48,4 @@ GPUSphere Sphere::toGPU(int materialIndex) const {
   gpu.materialIndex = materialIndex;
   return gpu;
 }
+

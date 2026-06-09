@@ -13,7 +13,7 @@
 
 class CpuViewer : public QWidget, public IViewer {
 public:
-  CpuViewer(int width, int height, const Scene &scene, const Camera &camera,
+  CpuViewer(const Scene &scene, const Camera &camera,
             const Integrator &integrator, int samplesPerPixel,
             QLabel *durationLabel, QWidget *parent = nullptr);
 
@@ -39,9 +39,6 @@ protected:
   void renderScene();
 
 private:
-  int m_width = 0;
-  int m_height = 0;
-
   const Scene &m_scene;
   const Camera &m_camera;
   const Integrator &m_integrator;
