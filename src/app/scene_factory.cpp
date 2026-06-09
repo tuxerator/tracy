@@ -25,7 +25,7 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
       glm::dvec3(0.0, -1.0, -9.5), gray));
 
   scene.addLight(std::make_shared<PointLight>(glm::dvec3(3.0, 4.0, 0.0),
-                                              Color(1.0, 1.0, 1.0), 25.0));
+                                              Color(1.0, 1.0, 1.0), 50.0));
 
   Camera camera(glm::dvec3(0.0, 0.5, 1.5),  // eye
                 glm::dvec3(0.0, 0.0, -4.0), // target
