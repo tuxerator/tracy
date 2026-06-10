@@ -31,6 +31,8 @@ struct MaterialSample {
 
     // True for perfect mirror-like events.
     bool delta = false;
+
+    bool specular = false;
 };
 
 class Material {
@@ -87,4 +89,16 @@ public:
 
 private:
     std::shared_ptr<Texture> m_texture;
+};
+
+class MirrorMaterial : public Material {
+    public:
+        MirrorMaterial(const Color& tint = Color(1.0, 1.0, 1.0));
+
+        Color albedo(const HitRecord&) const override;  // ← das fehlte
+        Color evaluate(const HitRecord&, const glm::dvec3& wo, const glm::dvec3& wi) const override;
+        MaterialSample sample(const HitRecord&, const glm::dvec3& wo) const override;
+
+    private:
+        Color m_tint;
 };

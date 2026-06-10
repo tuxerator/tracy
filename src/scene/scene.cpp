@@ -2,6 +2,9 @@
 
 #include "scene/scene.h"
 #include "core/color.h"
+#include "geometry/triangle.h"
+
+#include <iostream>
 
 Scene::Scene(Color background) : m_background(background) {}
 
@@ -13,23 +16,31 @@ void Scene::addLight(const std::shared_ptr<Light> &light) {
   m_lights.push_back(light);
 }
 
-bool Scene::intersect(const Ray &ray, HitRecord &rec) const {
-  bool hitAnything = false;
-  double closestSoFar = ray.tMax;
-
-  for (const auto &primitive : m_primitives) {
-    HitRecord tempRec;
-
-    if (primitive->intersect(ray, tempRec)) {
-      if (tempRec.t < closestSoFar && tempRec.t > ray.tMin) {
-        hitAnything = true;
-        closestSoFar = tempRec.t;
-        rec = tempRec;
-      }
+bool Scene::intersect(
+    const Ray& ray,
+    HitRecord& rec) const
+{
+    if (!m_root)
+    {
+        return false;
     }
-  }
 
-  return hitAnything;
+    return m_root->intersect(ray, rec);
+}
+
+void Scene::buildBVH()
+{
+    std::cout << "Building BVH with " << m_primitives.size() << " primitives" << std::endl;
+
+    if (m_primitives.empty())
+    {
+        return;
+    }
+
+    m_root = std::make_shared<BVHNode>(
+        m_primitives,
+        0,
+        m_primitives.size());
 }
 
 bool Scene::occluded(const Ray &ray) const {
