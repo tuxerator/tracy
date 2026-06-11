@@ -29,6 +29,7 @@ set(SOURCES
     src/geometry/plane.cpp
     src/shading/material.cpp
     src/shading/texture.cpp
+    src/shading/image_texture.cpp
     src/shading/light.cpp
 
     src/render/renderer.cpp
@@ -65,6 +66,7 @@ set(HEADERS
     include/shading/shading.h
     include/shading/material.h
     include/shading/texture.h
+    include/shading/image_texture.h
     include/shading/light.h
 
     include/render/renderer.h
