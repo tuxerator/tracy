@@ -54,3 +54,29 @@ GPUMaterial LambertMaterial::toGPU() const {
   return gpu;
 }
 
+MirrorMaterial::MirrorMaterial(const Color& tint) : m_tint(tint) {}
+
+Color MirrorMaterial::albedo(const HitRecord&) const {
+    return m_tint;
+}
+
+Color MirrorMaterial::evaluate(const HitRecord&,
+                                const glm::dvec3&,
+                                const glm::dvec3&) const {
+    // Perfekter Spiegel hat keine diffuse BRDF –
+    // die Energie steckt komplett im Sample
+    return Color(0.0, 0.0, 0.0);
+}
+
+MaterialSample MirrorMaterial::sample(const HitRecord& rec,
+                                       const glm::dvec3& wo) const {
+    // Reflektionsformel: wi = 2*(n·wo)*n - wo
+    glm::dvec3 wi = glm::reflect(-wo, rec.shadingNormal);
+
+    MaterialSample s;
+    s.wi       = wi;
+    s.weight   = m_tint;   // Energie die weitergetragen wird
+    s.pdf      = 1.0;      // Delta-Distribution → pdf = 1 als Konvention
+    s.specular = true;     // wichtig! (siehe unten)
+    return s;
+}

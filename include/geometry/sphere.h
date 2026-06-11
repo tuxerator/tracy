@@ -5,6 +5,7 @@
 
 #include "geometry/primitive.h"
 #include "shading/material.h"
+#include "accel/bbox.h"
 
 struct GPUSphere {
     glm::vec4 center;
@@ -20,6 +21,7 @@ public:
            std::shared_ptr<Material> material);
 
     bool intersect(const Ray& ray, HitRecord& rec) const override;
+    BBox boundingBox() const override;
 
     const std::shared_ptr<Material>& material() const override { return m_material; }
 

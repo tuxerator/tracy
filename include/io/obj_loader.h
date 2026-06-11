@@ -1,13 +1,13 @@
-// Placeholder interface for future mesh loading work.
-
 #pragma once
 
 #include <string>
+#include "shading/material.h"
 
 class Scene;
 
-class ObjLoader {
+class OBJLoader {
 public:
-    // Returns false in the starter until OBJ loading is implemented.
-    bool load(const std::string& path, Scene& scene) const;
+    static void load(const std::string& path,
+                     Scene& scene,
+                     std::shared_ptr<Material> material);
 };

@@ -49,3 +49,12 @@ GPUSphere Sphere::toGPU(int materialIndex) const {
   return gpu;
 }
 
+BBox Sphere::boundingBox() const
+{
+    glm::dvec3 r(m_radius);
+
+    return BBox(
+        m_center - r,
+        m_center + r
+    );
+}
