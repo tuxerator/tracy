@@ -5,13 +5,12 @@
 #include "render/integrator.h"
 
 class PathTracingIntegrator : public Integrator {
-    public:
-        PathTracingIntegrator(int maxDepth = 8,
-                            const Color& background = Color(0.0, 0.0, 0.0));
+public:
+  PathTracingIntegrator(int maxDepth = 8);
 
-        Color Li(const Ray& ray, const Scene& scene, int depth = 0) const;
+  Color Li(const Ray &ray, const Scene &scene, int depth = 0) const;
 
-    private:
-        int   m_maxDepth;
-        Color m_background;
+private:
+  int m_maxDepth;
+  Color m_background;
 };

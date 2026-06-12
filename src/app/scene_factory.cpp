@@ -18,7 +18,7 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
   auto mirror = std::make_shared<MirrorMaterial>(Color(0.95, 0.95, 0.95));
 
   auto dolphinTexturePath = QString(PROJECT_SOURCE_DIR) +
-                            "assets/models/10014_dolphin_v1_Diffuse.jpg";
+                            "/assets/models/10014_dolphin_v1_Diffuse.jpg";
   auto dolphinTexture = std::make_shared<ImageTexture>(dolphinTexturePath);
 
   auto dolphinMaterial = std::make_shared<LambertMaterial>(dolphinTexture);
@@ -30,7 +30,7 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
       std::make_shared<Sphere>(glm::dvec3(-1.5, 0.5, 1.5), 2.0, mirror));
 
   auto dolphinObjPath = QString(PROJECT_SOURCE_DIR) +
-                        "assets/models/10014_dolphin_v2_max2011_it2.obj";
+                        "/assets/models/10014_dolphin_v2_max2011_it2.obj";
   OBJLoader::load(dolphinObjPath.toStdString(), scene, dolphinMaterial);
 
   scene.addLight(std::make_shared<PointLight>(glm::dvec3(3.0, 4.0, 0.0),
