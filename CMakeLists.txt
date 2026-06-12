@@ -28,8 +28,9 @@ set(SOURCES
     src/geometry/sphere.cpp
     src/geometry/triangle.cpp
     src/geometry/plane.cpp
-    src/shading/image_texture.cpp
-    src/shading/material.cpp
+    src/shading/materials/material_base.cpp
+    src/shading/materials/lambert_material.cpp
+    src/shading/materials/mirror_material.cpp
     src/shading/texture.cpp
     src/shading/image_texture.cpp
     src/shading/light.cpp
@@ -70,8 +71,11 @@ set(HEADERS
     include/geometry/triangle.h
     include/geometry/plane.h
     include/shading/shading.h
-    include/shading/image_texture.h
     include/shading/material.h
+    include/shading/materials/material_types.h
+    include/shading/materials/material_base.h
+    include/shading/materials/lambert_material.h
+    include/shading/materials/mirror_material.h
     include/shading/texture.h
     include/shading/image_texture.h
     include/shading/light.h

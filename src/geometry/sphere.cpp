@@ -32,11 +32,16 @@ bool Sphere::intersect(const Ray &ray, HitRecord &rec) const {
       std::swap(t0, t1);
     }
 
+    if (t0 < 1e-12) {
+      return false;
+    }
+
     rec.t = t0;
     rec.material = m_material;
     rec.position = ray.at(t0);
     rec.frontFace = true;
-    rec.setFaceNormal(ray.direction, (rec.position - m_center) / m_radius);
+    rec.setFaceNormal(ray.direction,
+                      glm::normalize((rec.position - m_center) / m_radius));
   }
 
   return hit;
@@ -53,8 +58,5 @@ BBox Sphere::boundingBox() const
 {
     glm::dvec3 r(m_radius);
 
-    return BBox(
-        m_center - r,
-        m_center + r
-    );
+  return BBox(m_center - r, m_center + r);
 }
