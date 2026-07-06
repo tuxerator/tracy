@@ -15,7 +15,6 @@ Plane::Plane(const glm::dvec3 &point, const glm::dvec3 &normal,
 bool Plane::intersect(const Ray &ray, HitRecord &rec) const {
   double denom = glm::dot(m_normal, ray.direction);
 
-  // Ray paralell to plane
   if (std::abs(denom) < constants::kEpsilon) {
     return false;
   }
