@@ -31,11 +31,15 @@ public:
         return m_primitives;
     }
 
+    void addEmissivePrimitive(std::shared_ptr<Primitive> prim);
+    const std::vector<std::shared_ptr<Primitive>>& emissivePrimitives() const;
+
 private:
     Color m_background;
     std::vector<std::shared_ptr<Primitive>> m_primitives;
     std::shared_ptr<Primitive> m_root;
     std::vector<std::shared_ptr<Light>> m_lights;
+    std::vector<std::shared_ptr<Primitive>> m_emissivePrimitives;
 
   // Later directions may cache acceleration structures here.
 };

@@ -48,6 +48,15 @@ bool Scene::occluded(const Ray &ray) const {
   return intersect(ray, rec);
 }
 
-const std::vector<std::shared_ptr<Light>> &Scene::lights() const {
-  return m_lights;
+const std::vector<std::shared_ptr<Light>>& Scene::lights() const {
+    return m_lights;
+}
+
+void Scene::addEmissivePrimitive(std::shared_ptr<Primitive> prim) {
+    m_emissivePrimitives.push_back(prim);
+    addPrimitive(prim); // trotzdem normal zur BVH hinzufügen
+}
+
+const std::vector<std::shared_ptr<Primitive>>& Scene::emissivePrimitives() const {
+    return m_emissivePrimitives;
 }

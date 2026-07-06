@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.30)
+cmake_minimum_required(VERSION 3.28.3)
 
 set(TRACY "tracy")
 project(${TRACY})
@@ -30,9 +30,11 @@ set(SOURCES
     src/shading/materials/material_base.cpp
     src/shading/materials/lambert_material.cpp
     src/shading/materials/mirror_material.cpp
+    src/shading/materials/emissive_material.cpp
     src/shading/texture.cpp
     src/shading/image_texture.cpp
     src/shading/light.cpp
+    src/shading/image_texture.cpp
 
     src/render/renderer.cpp
     src/render/direct_lighting_integrator.cpp
@@ -72,9 +74,11 @@ set(HEADERS
     include/shading/materials/material_base.h
     include/shading/materials/lambert_material.h
     include/shading/materials/mirror_material.h
+    include/shading/materials/emissive_material.h
     include/shading/texture.h
     include/shading/image_texture.h
     include/shading/light.h
+    include/shading/image_texture.h
 
     include/render/renderer.h
     include/render/integrator.h
