@@ -16,6 +16,9 @@ public:
     bool intersect(const Ray& ray, HitRecord& rec) const override;
     BBox boundingBox() const override;
 
+    LightSample sampleLi(const glm::dvec3& shadingPoint,
+                          double u1, double u2) const override;
+
     const std::shared_ptr<Material>& material() const override { return m_material; }
 
 private:

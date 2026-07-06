@@ -19,7 +19,7 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
     // Blaue Lichtkugel
     auto blueLight = std::make_shared<EmissiveMaterial>(Color(0.2, 0.4, 0.9), 1.0);
     scene.addEmissivePrimitive(std::make_shared<Sphere>(
-        glm::dvec3(2.5, -3.0, 4.8), 0.5, blueLight));
+        glm::dvec3(1.5, -4.9, 3.0), 0.5, blueLight));
 
     // Grüne Lichtkuge
     auto greenLight = std::make_shared<EmissiveMaterial>(Color(0.2, 0.9, 0.3), 1.0);
@@ -50,7 +50,7 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
   scene.buildBVH();
 
   Camera camera(
-      glm::dvec3(15.0, 0.5, 3.0), // eye (40 Meter nach rechts verschoben)
+      glm::dvec3(15.0, 0.5, 3.0),
       glm::dvec3(11.5, 0.5, 2.5), glm::dvec3(0.0, 1.0, 0.0), 45.0, width,
       height);
 
