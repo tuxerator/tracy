@@ -30,6 +30,7 @@ set(SOURCES
     src/shading/materials/material_base.cpp
     src/shading/materials/lambert_material.cpp
     src/shading/materials/mirror_material.cpp
+    src/shading/materials/emissive_material.cpp
     src/shading/texture.cpp
     src/shading/image_texture.cpp
     src/shading/light.cpp
@@ -73,6 +74,7 @@ set(HEADERS
     include/shading/materials/material_base.h
     include/shading/materials/lambert_material.h
     include/shading/materials/mirror_material.h
+    include/shading/materials/emissive_material.h
     include/shading/texture.h
     include/shading/image_texture.h
     include/shading/light.h
