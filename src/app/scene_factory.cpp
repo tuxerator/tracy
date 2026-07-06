@@ -19,7 +19,7 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
     // Blaue Lichtkugel
     auto blueLight = std::make_shared<EmissiveMaterial>(Color(0.2, 0.4, 0.9), 1.0);
     scene.addEmissivePrimitive(std::make_shared<Sphere>(
-        glm::dvec3(2.5, -3.0, 4.8), 0.5, blueLight));
+        glm::dvec3(1.5, -4.9, 3.0), 0.5, blueLight));
 
     // Grüne Lichtkuge
     auto greenLight = std::make_shared<EmissiveMaterial>(Color(0.2, 0.9, 0.3), 1.0);
@@ -42,6 +42,13 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
                         "/assets/models/10014_dolphin_v2_max2011_it2.obj";
   OBJLoader::load(dolphinObjPath.toStdString(), scene, dolphinMaterial);
 
+  auto ceilingLight = std::make_shared<EmissiveMaterial>(Color(1.0, 0.95, 0.1), 3.0);
+  scene.addEmissivePrimitive(std::make_shared<Rectangle>(
+    glm::dvec3(-2.0, 5.0, -2.0),   // Ecke
+    glm::dvec3(4.0, 0.0, 0.0),     // u-Kante (Breite 4 in x)
+    glm::dvec3(0.0, 0.0, 4.0),     // v-Kante (Tiefe 4 in z)
+    ceilingLight));
+
     scene.addLight(std::make_shared<PointLight>(
         glm::dvec3(5.0, 5.0, 5.0),
         Color(1.0, 1.0, 1.0),
@@ -50,7 +57,7 @@ SceneSetup SceneFactory::createStarterScene(int width, int height) {
   scene.buildBVH();
 
   Camera camera(
-      glm::dvec3(15.0, 0.5, 3.0), // eye (40 Meter nach rechts verschoben)
+      glm::dvec3(15.0, 0.5, 3.0),
       glm::dvec3(11.5, 0.5, 2.5), glm::dvec3(0.0, 1.0, 0.0), 45.0, width,
       height);
 

@@ -3,6 +3,7 @@
 
 #include "render/path_tracing_integrator.h"
 #include "scene/scene.h"
+#include "core/random.h"
 #include <iostream>
 
 PathTracingIntegrator::PathTracingIntegrator(int maxDepth)
@@ -20,13 +21,12 @@ Color PathTracingIntegrator::Li(const Ray &ray, const Scene &scene,
     return scene.background();
   }
 
-  // Emission (z.B. Lichtquellen als Geometrie)
+  // Emission bei direktem Treffer (Kamera-Sicht auf die Lichtkugel selbst)
   Color result =
       rec.material ? rec.material->emission(rec) : Color(0.0, 0.0, 0.0);
 
   glm::dvec3 wo = -ray.direction;
 
-  // --- Direkte Beleuchtung (nur für nicht-spekulare Materialien) ---
   MaterialSample ms = rec.material->sample(rec, wo);
 
   if (!ms.specular) {
@@ -52,9 +52,51 @@ Color PathTracingIntegrator::Li(const Ray &ray, const Scene &scene,
       double cosTheta = std::max(0.0, glm::dot(rec.shadingNormal, wi));
       result += f * Li * cosTheta;
     }
+
+    // --- NEU: Emissive Primitives als Flächenlichter (Next Event Estimation) ---
+    for (const auto &emissivePrim : scene.emissivePrimitives()) {
+      // Verhindert, dass eine Kugel sich selbst beleuchtet
+      if (emissivePrim->material() == rec.material)
+        continue;
+
+      double u1 = randomDouble();
+      double u2 = randomDouble();
+      LightSample ls = emissivePrim->sampleLi(rec.position, u1, u2);
+
+      if (ls.pdf <= 0.0)
+        continue;
+
+      glm::dvec3 wiVec = ls.position - rec.position;
+      double dist2 = glm::dot(wiVec, wiVec);
+      double dist = std::sqrt(dist2);
+      if (dist < 1e-8)
+        continue;
+      glm::dvec3 wi = wiVec / dist;
+
+      double cosTheta = std::max(0.0, glm::dot(rec.shadingNormal, wi));
+      if (cosTheta <= 0.0)
+        continue;
+
+      Ray shadowRay;
+      shadowRay.origin = rec.position + rec.geometricNormal * 1e-6;
+      shadowRay.direction = wi;
+
+      HitRecord shadowRec;
+      // Etwas Toleranz (1e-4) vor der Lichtquelle, damit die Kugel sich nicht
+      // selbst verschattet (Rundungsfehler an der Oberfläche)
+      if (scene.intersect(shadowRay, shadowRec) && shadowRec.t < dist - 1e-4)
+        continue;
+
+      HitRecord lightRec;
+      lightRec.position = ls.position;
+      Color Le = emissivePrim->material()->emission(lightRec);
+
+      Color f = rec.material->evaluate(rec, wo, wi);
+      result += f * Le * cosTheta / ls.pdf;
+    }
   }
 
-  // --- Indirekter / spekularer Strahl ---
+  // --- Indirekter / spekularer Strahl (unverändert) ---
   if (ms.pdf > 0.0) {
     Ray bounceRay;
     bounceRay.origin = rec.position + rec.geometricNormal * 1e-6;
@@ -63,10 +105,8 @@ Color PathTracingIntegrator::Li(const Ray &ray, const Scene &scene,
     Color incoming = Li(bounceRay, scene, depth + 1);
 
     if (ms.specular) {
-      // Spiegel: weight enthält alles, kein cos/pdf nötig
       result += ms.weight * incoming;
     } else {
-      // Diffus: standard Monte-Carlo Schätzer
       double cosTheta = std::max(0.0, glm::dot(rec.shadingNormal, ms.wi));
       result += ms.weight * incoming * cosTheta / ms.pdf;
     }
