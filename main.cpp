@@ -14,9 +14,9 @@ int main(int argc, char **argv) {
 
   const int width = 1000;
   const int height = 800;
-  const int samplesPerPixel = 16;
+  const int samplesPerPixel = 8;
 
-  SceneSetup setup = SceneFactory::createStarterScene(width, height);
+  SceneSetup setup = SceneFactory::createRoomScene(width, height);
 
   std::cout << "setup done" << std::endl;
   PathTracingIntegrator integrator(8);
