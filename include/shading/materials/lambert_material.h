@@ -16,6 +16,8 @@ public:
   Color albedo(const HitRecord &rec) const override;
   Color evaluate(const HitRecord &rec, const glm::dvec3 &wo,
                  const glm::dvec3 &wi) const override;
+  
+  MaterialSample sample(const HitRecord &rec, const glm::dvec3 &) const;
 
   GPUMaterial toGPU() const override;
 

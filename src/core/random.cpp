@@ -3,6 +3,8 @@
 // can add sampling without reshaping the whole project.
 
 #include "core/random.h"
+#include <glm/glm.hpp>
+#include <cmath>
 
 #include <random>
 
@@ -19,4 +21,19 @@ double randomDouble() {
 
 double randomDouble(double minValue, double maxValue) {
     return minValue + (maxValue - minValue) * randomDouble();
+}
+
+glm::dvec3 randomCosineDirection()
+{
+    double u1 = randomDouble();
+    double u2 = randomDouble();
+
+    double r = std::sqrt(u1);
+    double theta = 2.0 * M_PI * u2;
+
+    double x = r * std::cos(theta);
+    double y = r * std::sin(theta);
+    double z = std::sqrt(1.0 - u1);
+
+    return glm::dvec3(x, y, z);
 }

@@ -32,6 +32,7 @@ set(SOURCES
     src/shading/materials/lambert_material.cpp
     src/shading/materials/mirror_material.cpp
     src/shading/materials/emissive_material.cpp
+    src/shading/materials/glass_material.cpp
     src/shading/texture.cpp
     src/shading/image_texture.cpp
     src/shading/light.cpp
@@ -77,6 +78,7 @@ set(HEADERS
     include/shading/materials/lambert_material.h
     include/shading/materials/mirror_material.h
     include/shading/materials/emissive_material.h
+    include/shading/materials/glass_material.h
     include/shading/texture.h
     include/shading/image_texture.h
     include/shading/light.h
@@ -100,6 +102,7 @@ set(HEADERS
 
 find_package(Qt6 REQUIRED COMPONENTS Widgets)
 find_package(Threads REQUIRED)
+find_package(OpenMP REQUIRED)
 
 add_executable(${TRACY} ${SOURCES} ${HEADERS})
 
@@ -115,4 +118,5 @@ target_compile_definitions(${TRACY} PRIVATE
 target_link_libraries(${TRACY}
     PRIVATE Qt6::Widgets
     ${CMAKE_THREAD_LIBS_INIT}
+    OpenMP::OpenMP_CXX
 )

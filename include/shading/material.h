@@ -7,6 +7,7 @@
 #include "shading/materials/lambert_material.h"
 #include "shading/materials/mirror_material.h"
 #include "shading/materials/emissive_material.h"
+#include "shading/materials/glass_material.h"
  
 #include <memory>
 #include <glm/glm.hpp>

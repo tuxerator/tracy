@@ -12,20 +12,24 @@
 int main(int argc, char **argv) {
   QApplication app(argc, argv);
 
-  const int width = 1000;
-  const int height = 800;
-  const int samplesPerPixel = 8;
+  const int width = 800;
+  const int height = 500;
+  const int samplesPerPixel = 120;
 
-  SceneSetup setup = SceneFactory::createRoomScene(width, height);
+  SceneSetup setup = SceneFactory::createStarterScene(width, height);
 
   std::cout << "setup done" << std::endl;
-  PathTracingIntegrator integrator(8);
+  PathTracingIntegrator integrator(4);
   std::cout << "integrator done" << std::endl;
 
   Gui window(width, height, setup.scene, setup.camera, integrator,
              samplesPerPixel);
 
+  std::cout << "window setup done" << std::endl;
+
   window.show();
+
+  std::cout << "show done";
 
   return app.exec();
 }

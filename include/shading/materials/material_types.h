@@ -4,7 +4,7 @@
 
 #include "core/color.h"
 
-enum class MaterialType { Lambert, Mirror, Dielectric, Emissive, Unknown };
+enum class MaterialType { Lambert, Mirror, Dielectric, Emissive, Glass, Unknown };
 
 struct MaterialSample {
   glm::dvec3 wi{0.0, 1.0, 0.0};

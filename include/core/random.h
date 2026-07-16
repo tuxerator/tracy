@@ -3,5 +3,8 @@
 
 #pragma once
 
+#include <glm/glm.hpp>
+
 double randomDouble();
 double randomDouble(double minValue, double maxValue);
+glm::dvec3 randomCosineDirection();
